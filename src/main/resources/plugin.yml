@@ -1,0 +1,4 @@
+name: x1spam
+version: '${project.version}'
+main: ru.x1ndi.x1spam.X1spam
+api-version: '1.20'

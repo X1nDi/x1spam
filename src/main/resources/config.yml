@@ -1,0 +1,4 @@
+mute-command: "mute %player% 30m"
+spam-limit: 4
+time-limit: 60 # time in seconds
+mute-message: "Вы были замучены за спам!"
