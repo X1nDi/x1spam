@@ -19,14 +19,18 @@ public class X1spam extends JavaPlugin implements Listener {
     private long timeLimit; // В миллисекундах
     private String muteMessage;
     private final String bypassPermission = "x1spam.bypass"; // Жестко заданное разрешение
+    private static int minMessageLength; // Минимальная длина сообщения
+    private static int similarityThreshold; // Порог схожести в процентах
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        muteCommand = getConfig().getString("mute-command", "mute %player% 30m");
+        muteCommand = getConfig().getString("mute-command", "mute %player% 30m Спам!");
         spamLimit = getConfig().getInt("spam-limit", 4);
         timeLimit = getConfig().getLong("time-limit", 60) * 1000; // Преобразуем секунды в миллисекунды
         muteMessage = getConfig().getString("mute-message", "Вы были замучены за спам!");
+        minMessageLength = getConfig().getInt("min-message-length", 4); // Получаем минимальную длину сообщения
+        similarityThreshold = getConfig().getInt("similarity-threshold", 80); // Получаем порог схожести
         getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -105,12 +109,12 @@ public class X1spam extends JavaPlugin implements Listener {
             int minLength = Math.min(msg1.length(), msg2.length());
 
             // Если одно из них короче минимальной длины, считаем их разными при условии полного равенства
-            if (msg1.length() <= 4 & msg2.length() <= 4) {
+            if (msg1.length() <= minMessageLength & msg2.length() <= minMessageLength) {
                 return msg1.equals(msg2); // Сравниваем на полное равенство
             }
 
             // Устанавливаем порог для схожести (80% от длины более короткого сообщения)
-            int threshold = (int) (minLength * 0.8); // 80% от длины
+            int threshold = (int) (minLength * (similarityThreshold / 100.0)); // 80% от длины
 
             // Считаем количество различий
             int differences = 0;

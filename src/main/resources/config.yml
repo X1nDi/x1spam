@@ -1,4 +1,6 @@
-mute-command: "mute %player% 30m"
+mute-command: "mute %player% 30m Спам!"
 spam-limit: 4
 time-limit: 60 # time in seconds
 mute-message: "Вы были замучены за спам!"
+min-message-length: 4 # Минимальная длина сообщения для проверки
+similarity-threshold: 80 # Порог схожести в процентах
