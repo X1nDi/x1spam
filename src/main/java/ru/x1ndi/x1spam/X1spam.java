@@ -101,8 +101,31 @@ public class X1spam extends JavaPlugin implements Listener {
         }
 
         private boolean isSimilar(String msg1, String msg2) {
-            // Проверка на схожесть сообщений (можно улучшить)
-            return msg1.equalsIgnoreCase(msg2) || Math.abs(msg1.length() - msg2.length()) <= 2;
+            // Находим длину более короткого сообщения
+            int minLength = Math.min(msg1.length(), msg2.length());
+
+            // Если одно из них короче минимальной длины, считаем их разными при условии полного равенства
+            if (msg1.length() <= 4 & msg2.length() <= 4) {
+                return msg1.equals(msg2); // Сравниваем на полное равенство
+            }
+
+            // Устанавливаем порог для схожести (80% от длины более короткого сообщения)
+            int threshold = (int) (minLength * 0.8); // 80% от длины
+
+            // Считаем количество различий
+            int differences = 0;
+
+            // Сравниваем символы в обоих сообщениях
+            for (int i = 0; i < minLength; i++) {
+                if (msg1.charAt(i) != msg2.charAt(i)) {
+                    differences++;
+                    if (differences > threshold) {
+                        return false; // Если различий больше порога, считаем сообщения разными
+                    }
+                }
+            }
+
+            return differences <= threshold; // Если общее количество различий меньше или равно порогу, считаем сообщения схожими
         }
     }
 }
